@@ -1,0 +1,16 @@
+*.pyc
+*.zip
+*.csv
+*.log
+2000
+CSV_Example
+Erorrs_file
+PDF_Example
+TEXT_Example
+TEXT_Example.back
+TEXT_Example_all
+XML_Example
+fpdf
+fpdf2
+test_text
+bc.py
