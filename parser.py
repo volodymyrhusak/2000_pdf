@@ -48,7 +48,8 @@ def get_all_file_new(fpath, form):
     fpdf.sort()
     flist = []
     for i,x in enumerate(fpdf):
-        flist.append('{}/{}'.format(fpath, x+form))
+        
+        flist.append(os.path.abspath(os.path.join(fpath, x+form)))
         if i == 2000:
             break
 
@@ -237,8 +238,8 @@ def get_all_file(fpath, form):
             fpdf.append(file)
     fpdf.sort()
     for i in xrange(2000):
-        flist.append('{}/{}'.format(fpath, fpdf[i]))
-    print len(flist)
+        flist.append(os.path.abspath(os.path.join(fpath, fpdf[i])))
+    # print len(flist)
 
     # flist = map(lambda x: '{}/{}'.format(fpath, x), fpdf)
     return flist
@@ -260,7 +261,10 @@ def pdftotext(pdf,page=None):
 
 
 def write_text(fname,data):
-    with open('{}/{}.txt'.format(TEXT_PATH,fname.split('/')[-1]), 'w') as out_file:
+    form = '.txt'
+    head, name = os.path.split(fname)
+    
+    with open(os.path.abspath(os.path.join(TEXT_PATH, name.split('.')[0]+form)), 'w') as out_file:
         # writer = csv.writer(out_file)
         out_file.write(str(data))
     print 'write text file = ' + fname
@@ -269,7 +273,6 @@ def write_csv(data):
     '''write csv file'''
     with open(OUTPUT_NAME, 'a') as out_file:
         writer = csv.writer(out_file)
-        print data
         writer.writerow(data)
 
     
