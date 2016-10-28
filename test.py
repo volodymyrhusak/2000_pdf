@@ -131,7 +131,7 @@ def parser(ftext):
             new_percent = ch[3]
 
 
-    # print ftext
+    print ftext
 
     # # else:
     #     fnew = '{}/{}'.format('Erorrs_file', ftext.split('/')[-1])
@@ -146,7 +146,7 @@ def parser(ftext):
     # print '----------------------------------------------------------'
     # print text_2
     # print '----------------------------------------------------------'
-    # print text_3
+    print text_3
     # print '----------------------------------------------------------'
     # print text_4
     # print '----------------------------------------------------------'

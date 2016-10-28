@@ -1,3 +1,315 @@
-{%for pdf in data%}
-    {{pdf}}
-{%endfor%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      /*------------------------------*\
+          Grid System
+      \*------------------------------*/
+
+      .row, 
+      .column {
+          box-sizing: border-box;
+      }
+
+      .row:before,
+      .row:after {
+          content: " ";
+          display: table;
+      }
+
+      .row:after {
+          clear: both;
+      }
+
+      .column {
+          position: relative;
+          float: left;
+          display: block;
+      }
+
+      .column + .column {
+          margin-left: 1.6%;
+      }
+
+      .column-1 {
+          width: 6.86666666667%;
+      }
+
+      .column-2 {
+          width: 15.3333333333%;
+      }
+
+      .column-3 {
+          width: 23.8%;
+      }
+
+      .column-4 {
+          width: 32.2666666667%;
+      }
+
+      .column-5 {
+          width: 40.7333333333%;
+      }
+
+      .column-6 {
+          width: 49.2%;
+      }
+
+      .column-7 {
+          width: 57.6666666667%;
+      }
+
+      .column-8 {
+          width: 66.1333333333%;
+      }
+
+      .column-9 {
+          width: 74.6%;
+      }
+
+      .column-10 {
+          width: 83.0666666667%;
+      }
+
+      .column-11 {
+          width: 91.5333333333%;
+      }
+
+      .column-12 {
+          width: 100%;
+          margin-left: 0;
+      }
+
+      @media only screen and (max-width: 550px) {
+          .column-1, 
+          .column-2, 
+          .column-3, 
+          .column-4, 
+          .column-5, 
+          .column-6, 
+          .column-7, 
+          .column-8, 
+          .column-9, 
+          .column-10, 
+          .column-11, 
+          .column-12 {
+              float: none;
+              width: auto;
+          }
+        
+          .column + .column {
+              margin-left: 0;
+          }
+      }
+
+      /*------------------------------*\
+          Styling
+      \*------------------------------*/
+
+      body {
+          padding: 20px;
+      }
+
+      .column {
+          background: #eee;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          color: #777;
+          padding: 5px;
+          min-height: 30px;
+          text-align: center;
+          box-shadow: 0 0 7px gray;
+      }
+
+      .row {
+          margin-bottom: 10px;
+      }
+
+      .row:last-child {
+          margin-bottom: 0;
+      }
+
+      .column .column {
+          color: #eee;
+          background: #333;
+          border-color: #000;
+      }
+
+      .p {
+        font-size: 14px;
+        text-align: center;
+        padding-top: 100px;
+      }
+
+      @media only screen and (max-width: 550px) {
+          .row {
+              margin-bottom: 0;
+          }
+          .column {
+              margin-bottom: 10px;
+          }
+          .row:last-child .column:last-child {
+              margin-bottom: 0;
+          }
+      }
+    </style>
+  </head>
+  <body>
+
+    <form class="form-horizontal">
+      <fieldset>
+        <!-- Form Name -->
+        <legend>Form</legend>
+        
+        <div class="row">
+          <div class="column column-3">
+            <!-- Select Multiple -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="selectmultiple">File name</label>
+              <div class="col-md-4">
+                <select id="selectmultiple" name="selectmultiple" class="form-control" multiple="multiple">
+
+                  {% for pdf in data %}
+
+                    <option value="{{ pdf }}" ondblclick="selectItem({{data[pdf]}})">{{ pdf }}</option>
+
+                  {% endfor %}
+
+                </select>
+
+                <input type="text" name="selectFile" id="selectFile"/>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="column column-9">
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="companyName">Company name</label>  
+              <div class="col-md-4">
+              <input id="companyName" type="text" class="form-control input-md" value="{{ companyName }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="acn">ACN/ARSN</label>  
+              <div class="col-md-4">
+              <input id="acn" type="text" class="form-control input-md" value="{{ acn }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="holderName">Holder name</label>  
+              <div class="col-md-4">
+              <input id="holderName" type="text" class="form-control input-md" value="{{ holderName }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="acnArsn">ACN/ARSN (if applicable)</label>  
+              <div class="col-md-4">
+              <input id="acnArsn" type="text" class="form-control input-md" value="{{ acnArsn }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="changeDate">Change date</label>  
+              <div class="col-md-4">
+              <input id="changeDate" type="text" class="form-control input-md" value="{{ changeDate }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="previousDate">Previous date</label>  
+              <div class="col-md-4">
+              <input id="previousDate" type="text" class="form-control input-md" value="{{ previousDate }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="previousNote">Previous note</label>  
+              <div class="col-md-4">
+              <input id="previousNote" type="text" class="form-control input-md" value="{{ previousNote }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="clas">Class</label>  
+              <div class="col-md-4">
+              <input id="clas" type="text" class="form-control input-md" value="{{ clas }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="previousShares">Previous shares</label>  
+              <div class="col-md-4">
+              <input id="previousShares" type="text" class="form-control input-md" value="{{ previousShares }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="previousPercent">Previous percent</label>  
+              <div class="col-md-4">
+              <input id="previousPercent" type="text" class="form-control input-md" value="{{ previousPercent }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="newShares">New shares</label>  
+              <div class="col-md-4">
+              <input id="newShares" type="text" class="form-control input-md" value="{{ newShares }}">
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="newPercent">New percent</label>  
+              <div class="col-md-4">
+              <input id="newPercent" type="text" class="form-control input-md" value="{{ newPercent }}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </fieldset>
+    </form>
+
+    <script type="text/javascript">
+
+      function selectItem(r) {
+        // var data = {{data}};
+        var x = document.getElementById("selectmultiple").selectedIndex;
+        // console.log(r);
+        var selectedItem = document.getElementsByTagName("option")[x].value;
+        // console.log(selectedItem);
+        document.getElementById("selectFile").value = r['Error reason/Success'];
+        document.getElementById('companyName').value = r['Company name'];
+        document.getElementById('acn').value = r['ACN'];
+        document.getElementById('holderName').value = r['Holder Name'];
+        document.getElementById('acnArsn').value = r['ACN/ARSN (if applicable)'];
+        document.getElementById('changeDate').value = r['Change Date'];
+        document.getElementById('previousDate').value = r['Previous Date'];
+        document.getElementById('previousNote').value = r['Previous Notice'];
+        document.getElementById('clas').value = r['Class'];
+        document.getElementById('previousShares').value = r['Previouse Shares'];
+        document.getElementById('previousPercent').value = r['Previous Percent'];
+        document.getElementById('newShares').value = r['New Shares'];
+        document.getElementById('newPercent').value = r['New Percent'];
+    }
+    </script>
+
+  </body>
+</html>
+

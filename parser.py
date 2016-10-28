@@ -13,7 +13,6 @@ OUTPUT_NAME = '{}.csv'.format(time.strftime("%c"))
 PDF_PATH = '2000'
 TEXT_PATH = 'TEXT_Example'
 XML_PATH = 'XML_Example'
-CSV_PATH = 'CSV_Example'
 
 def main():
     print 'start'
@@ -258,12 +257,7 @@ def pdftotext(pdf,page=None):
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
     # print type(data)
     return data
-def pdf_to_xml(fname):
-    print fname
-    pdf = pdfquery.PDFQuery(fname)
-    pdf.load()
-    with open('{}/{}.xml'.format(XML_PATH,fname.split('/')[-1]), 'wb') as f:
-        f.write(lxml.etree.tostring(pdf.tree, pretty_print=True, encoding="utf-8"))
+
 
 def write_text(fname,data):
     with open('{}/{}.txt'.format(TEXT_PATH,fname.split('/')[-1]), 'w') as out_file:
@@ -278,22 +272,7 @@ def write_csv(data):
         print data
         writer.writerow(data)
 
-
-def rest():
-    s=u'''To:Company Name/Scheme\n
-         To:Company Name/Scheme\n
-         To:Company Name/Scheme\n
-         To:Company Name/Scheme\n'''
-    s = re.search(ur':C',s)
-    print s.group()
-
     
 if __name__ == '__main__':
-    create_dir('TEXT_Example')
-    create_dir('CSV_Example')
-    create_dir(XML_PATH)
+    create_dir(TEXT_PATH)
     main()
-    # print list('')
-    # parser('PDF_Example/01588989-1.pdf.txt')
-	# get_all_pdf_file(PDF_PATH)
-    # rest()
