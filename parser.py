@@ -3,8 +3,6 @@ import subprocess
 import os
 import re
 import csv
-import pdfquery
-import lxml
 import time
 import shutil
 from shutil import copyfile
