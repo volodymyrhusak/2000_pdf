@@ -16,52 +16,23 @@ title = ('Document number/name', 'Company name', 'ACN', 'ACN/ARSN (if applicable
 
 OUTPUT_NAME = '{}.csv'.format(time.strftime("%c"))
 PDF_PATH = 'PDF_Example'
-TEXT_PATH = 'TEXT_Example'
 
 def main():
     print 'start'
     write_csv(title)
-    fpath = get_all_file_new(PDF_PATH, '.pdf')
+    fpath = get_all_file(PDF_PATH, '.pdf')
     for pdf in fpath:
         data_text = pdftotext(pdf)
-        clean_text = cleaner_text(data_text)
-        write_text(pdf, clean_text)
-    fpath = get_all_file(TEXT_PATH, '.txt')
-    for text in fpath:
-        final_data = parser(text)
+        clean_text = str(cleaner_text(data_text))
+        final_data = parser(clean_text,pdf)
         write_csv(final_data)
 
 
-def create_dir(dirc):
-    if not os.path.exists(dirc):
-        os.makedirs(dirc)
 
-
-def get_all_file_new(fpath, form):
-    '''scanning all files in dir'''
-    fxml = set()
-    for file in os.listdir(TEXT_PATH):
-        fxml.add(file.split('.')[0])
-    print len(fxml)
-    fpdf = []
-
-    for file in os.listdir(fpath):
-        fname = file.split('.')[0]
-        if file.endswith(form) and fname not in fxml:
-            fpdf.append(fname)
-    print len(fpdf)
-    fpdf.sort()
-    flist = []
-    for i, x in enumerate(fpdf):
-        flist.append(os.path.abspath(os.path.join(fpath, x + form)))
-    return flist
-
-def parser(ftext):
+def parser(text,ftext):
     '''Find information from in text file'''
     print 'start parse file: ' + ftext
-    with open(ftext, 'r') as file:
-        text = file.read()
-        file.close()
+    print type(text)
 
     document_number = ftext.split('/')[-1]
     document_number = document_number.split('.')[0]
@@ -237,6 +208,16 @@ def cleaner_text(org_text):
     clean_text = ''.join(i for i in org_text if ord(i) < 128)
     return org_text
 
+def clear_dir(folder):
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path): 
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(e)
 
 def get_all_file(fpath, form):
     '''scanning all files in dir'''
@@ -285,5 +266,4 @@ def write_csv(data):
 
 
 if __name__ == '__main__':
-    create_dir(TEXT_PATH)
     main()
