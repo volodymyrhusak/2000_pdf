@@ -2,6 +2,8 @@
 *.zip
 *.csv
 *.log
+*.bc
+.idea
 2000
 CSV_Example
 Erorrs_file
