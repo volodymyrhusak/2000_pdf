@@ -17,3 +17,6 @@ fpdf2
 test_text
 bc.py
 test.py
+parse_xml.py
+pdf_parser.py
+to_xml.py
