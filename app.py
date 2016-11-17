@@ -4,7 +4,7 @@ import csv
 
 app = Flask(__name__)
 
-CSV_PATH='CSV_PDFs.csv'
+CSV_PATH='OUTPUT.csv'
 
 @app.route('/', methods=["GET","POST"])
 def home():

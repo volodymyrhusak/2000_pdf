@@ -12,7 +12,8 @@ title = ('Document number/name', 'Company name', 'ACN', 'ACN/ARSN (if applicable
          'Previouse Shares', 'Previous Percent', 'New Shares', 'New Percent', 'Error reason/Success')
 
 
-OUTPUT_NAME = '{}.csv'.format(time.strftime("%c"))
+# OUTPUT_NAME = '{}.csv'.format(time.strftime("%c"))
+OUTPUT_NAME = 'OUTPUT.csv'
 PDF_PATH = 'PDF_Example'
 
 def main():
