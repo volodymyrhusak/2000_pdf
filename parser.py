@@ -4,13 +4,14 @@ import os
 import re
 import csv
 import time
+from dateutil.parser import parse
 import shutil
 from shutil import copyfile
 
 title = ('Document number/name', 'Company name', 'ACN', 'ACN/ARSN (if applicable)',
          'Holder Name', 'Change Date', 'Previous Notice', 'Previous Date', 'Class',
          'Previouse Shares', 'Previous Percent', 'New Shares', 'New Percent', 'Error reason/Success')
-
+monthDict = {}
 
 # OUTPUT_NAME = '{}.csv'.format(time.strftime("%c"))
 OUTPUT_NAME = 'OUTPUT.csv'
@@ -31,7 +32,6 @@ def main():
 def parser(text,ftext):
     '''Find information from in text file'''
     print 'start parse file: ' + ftext
-    print type(text)
 
     document_number = ftext.split('/')[-1]
     document_number = document_number.split('.')[0]
@@ -58,11 +58,12 @@ def parser(text,ftext):
     text_3 = text
     error_reason = 'Success'
     
-    search_date = re.compile(r'''(\s\d\d?\s?[-/\s.:;]\s?\w+\s?[-/\s.:;]\s?\d\d\d?\d?\s)|
-                                 (\s\d\d?\s*\w+\s*\d\d\d\d\s)|
-                                 (\s\d\d?\s*/\s*\d\d?\s*/\s*\d\d\d?\d?\s)|
-                                 (\s\d\d?[/-]\w+[/-]\d\d\d?\d?\s)|
-                                 (_?\d\d?_?./.?_?\d\d?_?.?/.?_?\d\d\d?\d?)''', re.X)
+    search_change = re.compile(r'''There\swas\sa\schange''', re.X)
+    
+    search_date = re.compile(r'''(\s\d\d?[_\s]?[-/\s.:;][_\s]?\d\d?
+                                [_\s]?[-/\s.:;][_\s]?\d\d\d?\d?)|
+                                (\s\d\d?[_\s]?[-/\s.:;][_\s]?\w+
+                                [_\s]?[-/\s.:;][_\s]?\d\d\d?\d?)''', re.X)
     
     search_comp_name = re.compile(r'((Name)|(Nome)|(To:?)|(TO:)).*\n')
     search_ACN = re.compile(r'''((ACN)|(AC\s?N/AR\s?S)|
@@ -100,7 +101,7 @@ def parser(text,ftext):
         piece_1 = re.search(r'^.*\n', text)
         text_0 = text
         text_1 = text
-    piece_2 = search_piece_1.search(text_1)
+    piece_2 = search_piece_2.search(text_1)
     if piece_2:
         text_2 = text_1[piece_2.start()::]
         text_1 = text_1[0:piece_2.start()]
@@ -116,12 +117,16 @@ def parser(text,ftext):
     ACN = search_ACN.search(text_0)
     comp_name_2 = search_comp_name_2.search(text_1)
     ACN_2 = search_ACN_2.search(text_1)
-    date_1 = search_date.search(text_1)
+    change = search_change.search(text)
     
-    if date_1:
-        date_2 = search_date.search(text_1[date_1.end()::])
-        if date_2:
-            date_3 = search_date.search(text_1[date_2.end()::])
+    if change:
+        textDate = text[change.start()::]
+        date_1 = search_date.search(textDate)
+        if date_1:
+            textDate = textDate[date_1.end()::]
+            date_2 = search_date.search(textDate)
+            if date_2:  
+                date_3 = search_date.search(textDate[date_2.end()::])
     
     ch = serch_ch.search(text_2)
     if ch:
@@ -170,20 +175,20 @@ def parser(text,ftext):
         pass
     
     try:
-        date_1 = date_1.group().replace(' ', '')
+        date_1 = clear_date(date_1.group())
     except AttributeError as e:
         pass
     
     try:
-        date_2 = date_2.group().replace(' ', '')
+        date_2 = clear_date(date_2.group())
     except AttributeError as e:
         pass
     
     try:
-        date_3 = date_3.group().replace(' ', '')
+        # date_3 = date_3.group().replace(' ', '')
+        date_3 = clear_date(date_3.group())
     except AttributeError as e:
         pass
-    
     result = [document_number, comp_name, ACN, ACN_2, 
               comp_name_2, date_1, date_2, date_3, ch_class, previouse_shares,
               previous_percen, new_shares, new_percent, error_reason]
@@ -193,6 +198,19 @@ def parser(text,ftext):
             result[-1] = 'PDF not standard format'
     return tuple(result)
 
+
+def clear_date(date):
+    date = date.strip()
+    date = re.sub(r'\n','',date)
+    date = re.sub(r'[-/\s.:;]','/',date)
+    date = re.sub(r'//+','/',date)
+    try:
+        dt = parse(date)
+        date = dt.strftime('%d/%m/%Y')
+    except ValueError as e:
+        date = ''
+    
+    return date
 
 def cleaner_text(org_text):
     '''Cleaning text for no alphabetic characters and other unnecessary symbols'''
@@ -232,7 +250,7 @@ def get_all_file(fpath, form):
 
 def pdftotext(pdf, page=None):
     '''extract text from pdf file'''
-    print "to text = " + pdf
+    # print "to text = " + pdf
     if page is None:
         args = ['pdftotext', '-layout', '-q', pdf, '-']
     else:
